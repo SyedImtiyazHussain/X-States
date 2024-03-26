@@ -9,29 +9,49 @@ export default function App() {
   const [city, setCity] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
 
-  useEffect(() => {
-    fetch("https://crio-location-selector.onrender.com/countries")
-      .then((response) => response.json())
-      .then((data) => setCountries(data));
-  }, []);
+  const getCountries = async() => {
+    try{
+      const response = await fetch("https://crio-location-selector.onrender.com/countries");
+      const data = await response.json();
+      setCountries(data);
+    } catch(error) {
+      console.error("Error fetching countries:",error);
+    }
+  }
 
   useEffect(() => {
-    if (selectedCountry !== "") {
-      fetch(
-        `https://crio-location-selector.onrender.com/country=${selectedCountry}/states`
-      )
-        .then((response) => response.json())
-        .then((data) => setStates(data));
+    getCountries();
+  }, []);
+
+  const getStates = async() => {
+      try{
+        const response = await fetch(`https://crio-location-selector.onrender.com/country=${selectedCountry}/states`);
+        const data = await response.json();
+        setStates(data);
+      } catch(error) {
+        console.error("Error fetching states:",error);
+      }
+  }
+
+  useEffect(() => {
+    if (selectedCountry) {
+      getStates();
     }
   }, [selectedCountry]);
 
+  const getCities = async() => {
+      try{
+        const response = await fetch(`https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${selectedState}/cities`);
+        const data = await response.json();
+      setCity(data);
+    } catch(error) {
+      console.error("Error fetching cities:",error);
+    }
+  }
+
   useEffect(() => {
-    if (selectedState !== "") {
-      fetch(
-        `https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${selectedState}/cities`
-      )
-        .then((response) => response.json())
-        .then((data) => setCity(data));
+    if (selectedState){
+      getCities();
     }
   }, [selectedState]);
 
