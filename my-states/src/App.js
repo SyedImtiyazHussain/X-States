@@ -36,40 +36,41 @@ export default function App() {
   }, [selectedState]);
 
   return (
-    <div className="App">
+    <div className="city-selector">
       <h1>Select Location</h1>
+      <div className="dropdowns">
       <select
-        className="select"
         value={selectedCountry}
         onChange={(e) => setSelectedCountry(e.target.value)}
+        className="dropdown"
       >
-        <option value="">Select Country</option>
+        <option value="" disabled>Select Country</option>
         {countries.map((country) => (
-          <option key={country}>{country}</option>
+          <option key={country} value={country}>{country}</option>
         ))}
       </select>
 
       <select
-        className="select"
+        className="dropdown"
         value={selectedState}
         onChange={(e) => setSelectedState(e.target.value)}
         disabled={!selectedCountry}
       >
-        <option value="">Select State</option>
+        <option value="" disabled>Select State</option>
         {states.map((state) => (
-          <option key={state}>{state}</option>
+          <option key={state} value={state}>{state}</option>
         ))}
       </select>
 
       <select
-        className="select"
+        className="dropdown"
         value={selectedCity}
         onChange={(e) => setSelectedCity(e.target.value)}
         disabled={!selectedState}
       >
-        <option value="">Select City</option>
+        <option value="" disabled>Select City</option>
         {city.map((city) => (
-          <option key={city}>{city}</option>
+          <option key={city} value={city}>{city}</option>
         ))}
       </select>
       {selectedCity && (
@@ -82,6 +83,7 @@ export default function App() {
           <span style={{ color: "gray" }}>{selectedCountry}</span>
         </p>
       )}
+      </div>
     </div>
   );
 }
